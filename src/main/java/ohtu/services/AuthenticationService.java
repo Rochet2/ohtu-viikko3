@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ohtu.data_access.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,7 @@ public class AuthenticationService {
     private UserDao userDao;
 
     @Autowired
-    public AuthenticationService(UserDao userDao) {
+    public AuthenticationService(@Value("#{fileuserdao}") UserDao userDao) {
         this.userDao = userDao;
     }
 
