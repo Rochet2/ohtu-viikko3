@@ -19,36 +19,37 @@ public class AuthenticationService {
 
     public boolean logIn(String username, String password) {
         for (User user : userDao.listAll()) {
-            if (user.getUsername().equals(username)
-                    && user.getPassword().equals(password)) {
+            if (user.hasCredentials(username, password)) {
                 return true;
             }
         }
-
         return false;
     }
 
     public boolean createUser(String username, String password) {
-        if (userDao.findByName(username) != null) {
+        if (userDao.findByName(username) != null)
             return false;
-        }
-
-        if (invalid(username, password)) {
+        if (invalid(username, password))
             return false;
-        }
-
         userDao.add(new User(username, password));
-
         return true;
     }
 
     private boolean invalid(String username, String password) {
-        if (username.length() < 3)
+        if (invalidUsername(username))
             return true;
-        if (!username.matches("[a-z]*"))
-            return true;
+        return invalidPassword(password);
+    }
+
+    public boolean invalidPassword(String password) {
         if (password.length() < 8)
             return true;
         return !password.matches(".*[^A-Za-z].*");
+    }
+
+    public boolean invalidUsername(String username) {
+        if (username.length() < 3)
+            return true;
+        return !username.matches("[a-z]*");
     }
 }
